@@ -1,26 +1,8 @@
-//*****************************************************************************
-//
-// hello.c - Simple hello world example.
-//
-// Copyright (c) 2012 Texas Instruments Incorporated.  All rights reserved.
-// Software License Agreement
-// 
-// Texas Instruments (TI) is supplying this software for use solely and
-// exclusively on TI's microcontroller products. The software is owned by
-// TI and/or its suppliers, and is protected under applicable copyright
-// laws. You may not combine this software with "viral" open-source
-// software in order to form a larger program.
-// 
-// THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
-// NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
-// NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
-// CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
-// DAMAGES, FOR ANY REASON WHATSOEVER.
-// 
-// This is part of revision 9453 of the EK-LM4F120XL Firmware Package.
-//
-//*****************************************************************************
+/**
+ * @file onewire.cpp
+ *
+ * CSH Drink Controller
+ */
 
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
@@ -36,8 +18,7 @@
 
 #include <vector>
 
-#include "stellaris-pins/DigitalIOPin.h"
-#include "OneWireMaster.h"
+#include "stellaris-onewire/OneWireMaster.h"
 
 //*****************************************************************************
 //
@@ -53,32 +34,31 @@ __error__(char *pcFilename, unsigned long ulLine)
 
 
 
-int
-main(void)
+int main(void)
 {
-    // Setup for 16MHZ external crystal, use 200MHz PLL and divide by 4 = 50MHz
-    ROM_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
-    		  SYSCTL_OSC_MAIN);
+	// Setup for 16MHZ external crystal, use 200MHz PLL and divide by 4 = 50MHz
+	ROM_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
+			  SYSCTL_OSC_MAIN);
 
-    // Pin objects used for debugging/status/etc.
-    DigitalIOPin LEDRED(SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PIN_1);
-    DigitalIOPin LEDBLUE(SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PIN_2);
-    DigitalIOPin LEDGREEN(SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PIN_3);
+	// Pin objects used for debugging/status/etc.
+	DigitalIOPin LEDRED(SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PIN_1);
+	DigitalIOPin LEDBLUE(SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PIN_2);
+	DigitalIOPin LEDGREEN(SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PIN_3);
 
-    // OneWire controller object
-    OneWireMaster OWM(OW_SPEED_STANDARD, SYSCTL_PERIPH_GPIOA, GPIO_PORTA_BASE, GPIO_PIN_5);
+	// OneWire controller object
+	OneWireMaster OWM(OW_SPEED_STANDARD, SYSCTL_PERIPH_GPIOA, GPIO_PORTA_BASE, GPIO_PIN_5);
 
-    // Initialize the UART.
-    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-    ROM_GPIOPinConfigure(GPIO_PA0_U0RX);
-    ROM_GPIOPinConfigure(GPIO_PA1_U0TX);
-    ROM_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-    UARTStdioInit(0);
+	// Initialize the UART.
+	ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+	ROM_GPIOPinConfigure(GPIO_PA0_U0RX);
+	ROM_GPIOPinConfigure(GPIO_PA1_U0TX);
+	ROM_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+	UARTStdioInit(0);
 
-    // Mark that we've started a new session
-    UARTprintf("\n\nSTART\n\n");
+	// Mark that we've started a new session
+	UARTprintf("\n\nSTART\n\n");
 
-    OWM.WaitUS(10000);
+	OWM.WaitUS(10000);
 
 	char buffchar[50];
 	int buffNum = 0;
@@ -166,5 +146,7 @@ main(void)
 		OWM.WaitUS(20000);
 
 	}
+
+	return 0;
 
 }
