@@ -1,0 +1,3 @@
+[submodule "stellaris-onewire"]
+	path = stellaris-onewire
+	url = git@github.com:MrDoomBringer/stellaris-onewire.git
